@@ -33,9 +33,14 @@ p {
 }
 
 .window {
-  margin-top: 5px;
+  resize: none;
+  text-align: right;
   background-color: white;
   border-radius: 4px;
+  border: 0px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 0;
 }
 
 .numbers, .operations, .equals {
@@ -69,4 +74,8 @@ button {
   border: 0px;
   border-radius: 4px;
   margin: 2px;
+}
+
+button:hover {
+  background-color: rgba(255,0,0,0.2);
 }
