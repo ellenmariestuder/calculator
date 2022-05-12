@@ -1,42 +1,144 @@
 
-// set up event listener on all buttons in calculator
-// 1. define length of button elements
-var buttons = document.querySelectorAll('.grid-item').length;
+// built with guidance from: 
+// https://www.section.io/engineering-education/building-a-calculator-a-javascript-project-for-beginners/
 
-// 2. implement loop to add event listener to all buttons
-for (var i = 0; i < buttons; i++) {
-  document.querySelectorAll('.grid-item')[i].addEventListener('click', function () {
-    console.log('you did it, you bad bitch');
-  });
+// create variables to represent the different kinds of buttons
+const numberButtons = document.querySelectorAll('[number-button]');
+const operationButtons = document.querySelectorAll('[op-button]');
+const equalsButton = document.querySelector('[equals-button]');
+// const deleteButton = document.querySelector('[delete-button]');
+const clearButton = document.querySelector('[clear-button]')
+const previousOperandTextElement = document.querySelector('[previous-operand]');
+const currentOperandTextElement = document.querySelector('[current-operand]');
+
+// create calculator class with constructor that will take all 
+//     inputs and calculator functions
+class Calculator {
+  constructor(previousOperandTextElement, currentOperandTextElement) {
+    this.previousOperandTextElement = previousOperandTextElement
+    this.currentOperandTextElement = currentOperandTextElement
+    this.clear()
+  }
+
+  // clear function deletes displayed values
+  clear() {
+    this.currentOperand = ''
+    this.previousOperand = ''
+    this.operation = undefined
+    this.currentOperandTextElement.innerText = ''
+  }
+
+  // delete function
+  delete() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1)
+  }
+
+  // append number function
+  appendNumber(number) {
+    if (number === '.' && this.currentOperand.includes('.')) return
+    this.currentOperand = this.currentOperand.toString() + number.toString()
+  }
+
+  // choose operation function
+  chooseOperation(operation) {
+    if (this.currentOperand === '') return
+    if (this.previousOperand !== '') {
+      this.compute()
+    }
+    this.operation = operation
+    this.previousOperand = this.currentOperand
+    this.currentOperand = ''
+  }
+
+  // compute function
+  compute() {
+    let computation
+    const prev = parseFloat(this.previousOperand)
+    const current = parseFloat(this.currentOperand)
+    if (isNaN(prev) || isNaN(current)) return
+    switch (this.operation) {
+      case '+':
+        computation = prev + current
+        break
+      case '-':
+        computation = prev - current
+        break
+      case '*':
+        computation = prev * current
+        break
+      case '÷':
+        computation = prev / current
+        break
+      default:
+        return
+    }
+    this.currentOperand = computation
+    this.operation = undefined
+    this.previousOperand = ''
+  }
+
+  // get display number function
+  getDisplayNumber(number) {
+    const stringNumber = number.toString()
+    const integerDigits = parseFloat(stringNumber.split('.')[0])
+    const decimalDigits = stringNumber.split('.')[1]
+    let integerDisplay
+    if (isNaN(integerDigits)) {
+      integerDisplay = ''
+    } else {
+      integerDisplay = integerDigits.toLocaleString('en', { maximumFractionDigits: 0 })
+    }
+    if (decimalDigits != null) {
+      return `${integerDisplay}.${decimalDigits}`
+    } else {
+      return integerDisplay
+    }
+  }
+
+  // update display function
+  updateDisplay() {
+    this.currentOperandTextElement.innerText =
+      this.getDisplayNumber(this.currentOperand)
+    if (this.operation != null) {
+      this.previousOperandTextElement.innerText =
+        `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
+    } else {
+      this.previousOperandTextElement.innerText = ''
+    }
+  }
+
 }
 
-// function to show text value of button clicked in calc window
-function copyToTextarea(el) {
-  var text = el.textContent;
-  var textarea = document.getElementById('window');
-  textarea.value = textarea.value + text;
-  console.log(text);
-}
 
-// function to clear calc window when 'ce' button has been clicked
-function clearWindow(el) {
-  // var text = el.textContent;
-  var textarea = document.getElementById('window');
-  textarea.value = null;
-  console.log('BYE')
-}
+// create calculator constant; hook all variables,  
+//    make them operate on the calculator object
+const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
 
-// setting up the mathematical operation
-// 1. when an operation button is clicked, store the current 
-//    value of the textarea in local storage
+// number button event listener
+numberButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    calculator.appendNumber(button.innerText)
+    calculator.updateDisplay()
+  })
+})
 
-// 2. store the math operation selected in local storage
+// operation button event listener
+operationButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    calculator.chooseOperation(button.innerText)
+    calculator.updateDisplay()
+  })
+})
 
+// equals button event listener
+equalsButton.addEventListener('click', () => {
+  calculator.compute()
+  calculator.updateDisplay()
+})
 
-
-// carry out the operation
-// 1. when equals button is clicked, store the current value
-//    of the text area in local storage
-
-// 2. retrieve data from local storage and perform the operation
+// clear button event listener
+clearButton.addEventListener('click', () => {
+  calculator.clear()
+  calculator.updateDisplay()
+})
 

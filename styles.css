@@ -4,8 +4,8 @@
 }
 
 html {
-  background: linear-gradient(to right bottom, rgba(255,0,0,0), rgba(255,0,0,0.6));
-  background-attachment: fixed; 
+  background: linear-gradient(to right bottom, rgba(255, 0, 0, 0), rgba(255, 0, 0, 0.6));
+  background-attachment: fixed;
 }
 
 p {
@@ -27,12 +27,15 @@ p {
   font-size: 20px;
 }
 
-.window, .buttons, .numbers {
+.window,
+.buttons,
+.numbers {
   display: grid;
   grid-auto-flow: column;
 }
 
 .window {
+  min-height: 30px;
   resize: none;
   text-align: right;
   background-color: white;
@@ -43,7 +46,9 @@ p {
   padding-bottom: 0;
 }
 
-.numbers, .operations, .equals {
+.numbers,
+.operations,
+.equals {
   padding: 5px;
 }
 
@@ -77,5 +82,5 @@ button {
 }
 
 button:hover {
-  background-color: rgba(255,0,0,0.2);
+  background-color: rgba(255, 0, 0, 0.2);
 }
