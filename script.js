@@ -149,3 +149,40 @@ clearButton.addEventListener('click', () => {
   calculator.updateDisplay()
 })
 
+
+// keydown event listener
+document.addEventListener('keydown', function (event) {
+  let patternForNumbers = /[0-9]/g;
+  let patternForOperations = /[+\-*\/]/g
+  if (event.key.match(patternForNumbers)) {
+    event.preventDefault();
+    calculator.appendNumber(event.key)
+    calculator.updateDisplay()
+  }
+  if (event.key === '.') {
+    event.preventDefault();
+    calculator.appendNumber(event.key)
+    calculator.updateDisplay()
+  }
+  if (event.key.match(patternForOperations)) {
+    event.preventDefault();
+    calculator.chooseOperation(event.key)
+    calculator.updateDisplay()
+  }
+  if (event.key === 'Enter' || event.key === '=') {
+    event.preventDefault();
+    calculator.compute()
+    calculator.updateDisplay()
+  }
+  if (event.key === 'Backspace') {
+    event.preventDefault();
+    calculator.delete()
+    calculator.updateDisplay()
+  }
+  if (event.key === 'Delete') {
+    event.preventDefault();
+    calculator.clear()
+    calculator.updateDisplay()
+  }
+
+})
