@@ -1,6 +1,7 @@
 
 // built with guidance from: 
 // https://www.section.io/engineering-education/building-a-calculator-a-javascript-project-for-beginners/
+// https://www.youtube.com/watch?v=j59qQ7YWLxw
 
 // create variables to represent the different kinds of buttons
 const numberButtons = document.querySelectorAll('[number-button]');
@@ -35,8 +36,14 @@ class Calculator {
 
   // append number function
   appendNumber(number) {
-    if (number === '.' && this.currentOperand.includes('.')) return
-    this.currentOperand = this.currentOperand.toString() + number.toString()
+    if (this.currentOperandTextElement.classList.contains('computation')) {
+      this.currentOperand = number.toString()
+      this.currentOperandTextElement.classList.remove('computation')
+      if (number === '.' && this.currentOperand.includes('.')) return
+    } else {
+      if (number === '.' && this.currentOperand.includes('.')) return
+      this.currentOperand = this.currentOperand.toString() + number.toString()
+    }
   }
 
   // choose operation function
@@ -75,6 +82,7 @@ class Calculator {
     this.currentOperand = computation
     this.operation = undefined
     this.previousOperand = ''
+    this.currentOperandTextElement.classList.add('computation')
   }
 
   // get display number function
@@ -108,7 +116,6 @@ class Calculator {
   }
 
 }
-
 
 // create calculator constant; hook all variables,  
 //    make them operate on the calculator object
